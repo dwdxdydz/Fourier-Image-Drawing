@@ -1,32 +1,31 @@
 # Fourier Image Drawing
 
-A computer-vision experiment that converts image contours into complex Fourier coefficients and reconstructs the shape with rotating vectors (epicycles).
+Reconstructs the largest contour in an image using a discrete Fourier series and visualizes the reconstruction as an epicycle animation.
 
 ## What it demonstrates
 
-1. Extract an image contour using OpenCV.
-2. Center the contour coordinates.
-3. Compute discrete Fourier coefficients for positive and negative frequencies.
-4. Reconstruct the path by rotating coefficient vectors over time.
-5. Export the reconstruction as an animated GIF.
+- OpenCV contour extraction
+- Discrete Fourier coefficients
+- Complex-number representation of 2D coordinates
+- Fourier approximation with positive/negative frequencies
+- Matplotlib animation and GIF export
 
 ## Run
 
-Install the Python dependencies and provide an input image path in `main.py`.
-
 ```bash
-python -m venv .venv
-source .venv/bin/activate
 pip install -r requirements.txt
-python main.py
+python main.py --input image.jpg --output file.gif --terms 100 --frames 300 --fps 20
 ```
 
-## Tech Stack
+Increase `--terms` for a closer reconstruction at the cost of more animation objects. `--frames` controls smoothness and `--fps` controls playback speed.
 
-**Python · OpenCV · NumPy · Matplotlib · SymPy · Fourier Analysis**
+## Project structure
 
-## Resume Description
+- `main.py` — production CLI and reconstruction pipeline
+- `draw.py` — original drawing experiment
+- `image.jpg` — sample input
+- `file.gif` — sample output
 
-**Fourier Image Drawing | Python, OpenCV, NumPy, Fourier Analysis**
+## Notes
 
-Built a computer-vision visualization pipeline that extracts contours from images, transforms 2D coordinates into complex Fourier coefficients, and reconstructs the original shape using rotating-vector epicycles. Added animation and symbolic Fourier-series generation to make the mathematical reconstruction observable.
+The implementation centers the contour, normalizes the animation bounds from the selected coefficients, and validates CLI inputs instead of relying on hardcoded plotting limits.
