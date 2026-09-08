@@ -4,7 +4,7 @@ Reconstructs the largest contour in an image using a discrete Fourier series and
 
 ## What it demonstrates
 
-- OpenCV contour extraction
+- Dependency-light image contour extraction
 - Discrete Fourier coefficients
 - Complex-number representation of 2D coordinates
 - Fourier approximation with positive/negative frequencies
@@ -29,3 +29,5 @@ Increase `--terms` for a closer reconstruction at the cost of more animation obj
 ## Notes
 
 The implementation centers the contour, normalizes the animation bounds from the selected coefficients, and validates CLI inputs instead of relying on hardcoded plotting limits.
+
+The command-line renderer is headless and writes GIF files, so it works in CI and other environments without a desktop display. The optional `draw.py` experiment opens an OpenCV window and requires installing a desktop-capable `opencv-python` package separately.
