@@ -1,14 +1,36 @@
-# Fourier Image Drawing
+# 🌀 Fourier Image Drawing
 
-Reconstructs the largest contour in an image using a discrete Fourier series and visualizes the reconstruction as an epicycle animation.
+Reconstructs an image contour using a **discrete Fourier series** and visualizes the reconstruction as an epicycle animation.
 
 ## What it demonstrates
 
-- Dependency-light image contour extraction
-- Discrete Fourier coefficients
+- Image contour extraction
 - Complex-number representation of 2D coordinates
-- Fourier approximation with positive/negative frequencies
+- Discrete Fourier coefficients
+- Positive and negative frequency components
+- Fourier approximation and reconstruction
 - Matplotlib animation and GIF export
+- Command-line configuration and input validation
+
+## How it works
+
+```text
+Image
+  ↓
+Largest contour
+  ↓
+Center + normalize coordinates
+  ↓
+Complex signal
+  ↓
+Fourier coefficients
+  ↓
+Select frequency terms
+  ↓
+Epicycle reconstruction
+  ↓
+Animated drawing / GIF
+```
 
 ## Run
 
@@ -17,17 +39,29 @@ pip install -r requirements.txt
 python main.py --input image.jpg --output file.gif --terms 100 --frames 300 --fps 20
 ```
 
-Increase `--terms` for a closer reconstruction at the cost of more animation objects. `--frames` controls smoothness and `--fps` controls playback speed.
+Increase `--terms` for a closer reconstruction at the cost of more animation objects. `--frames` controls animation smoothness and `--fps` controls playback speed.
 
 ## Project structure
 
 - `main.py` — production CLI and reconstruction pipeline
 - `draw.py` — original drawing experiment
+- `working.py` — development experiment
 - `image.jpg` — sample input
 - `file.gif` — sample output
+- `tests/` — automated checks
 
-## Notes
+## Engineering highlights
 
-The implementation centers the contour, normalizes the animation bounds from the selected coefficients, and validates CLI inputs instead of relying on hardcoded plotting limits.
+The production renderer validates inputs, centers the contour, handles positive/negative frequencies, dynamically scales the animation bounds, and supports headless GIF rendering for CI environments.
 
-The command-line renderer is headless and writes GIF files, so it works in CI and other environments without a desktop display. The optional `draw.py` experiment opens an OpenCV window and requires installing a desktop-capable `opencv-python` package separately.
+## Portfolio value
+
+Demonstrates **Python, NumPy, computer vision basics, mathematical modelling, Fourier analysis, visualization, CLI design, testing, and performance-aware reconstruction**.
+
+## Future improvements
+
+- FFT-based coefficient calculation
+- Better contour preprocessing and resampling
+- Reconstruction performance benchmarks
+- Interactive parameter controls
+- Mathematical explanation with visual examples
