@@ -2,55 +2,67 @@
 
 ## What is this project?
 
-This project takes an image, finds its main outline, and then **redraws that outline using rotating circles**.
+This project takes an image, finds its main outline, and redraws that outline using a collection of rotating circles.
 
-The result looks like a set of circles rotating around one another until their combined movement draws the original shape.
+The interesting part is that the circles are not chosen manually. Mathematics is used to calculate how they should rotate so that their combined movement recreates the original outline.
 
-This is based on **Fourier analysis**, a mathematical technique for representing a complicated signal using simpler waves.
+This is based on **Fourier analysis**, a mathematical technique for representing a complicated signal using simpler repeating components.
 
-## What does it look like conceptually?
+## Simple idea
+
+Imagine tracing the outline of a shape with your finger.
+
+The program records points along that outline and treats the points as a signal. Fourier analysis then breaks that signal into components with different frequencies and sizes.
+
+Those components are visualised as rotating circles, called **epicycles**.
 
 ```text
 Input image
     ↓
 Find the outline
     ↓
-Turn outline points into numbers
+Record outline points
+    ↓
+Represent points as numbers
     ↓
 Calculate Fourier components
     ↓
-Use rotating circles
+Create rotating circles
+    ↓
+Combine their movement
     ↓
 Reconstruct the outline
     ↓
-Create an animation / GIF
+Create animation / GIF
 ```
 
-## Example idea
+## What does the result mean?
 
-If the input image contains a simple shape, the application records points along its boundary.
+A small number of Fourier components gives a rough version of the shape.
 
-It then represents those points as a signal. The signal can be approximated using multiple rotating components.
+More components preserve more detail:
 
 ```text
-Few components     → rough drawing
-More components    → closer drawing
-Many components    → detailed drawing
+Few terms       → rough shape
+More terms      → better shape
+Many terms      → more detailed shape
 ```
+
+There is therefore a trade-off between **detail and rendering work**.
 
 ## Main features
 
-- Reads an input image
-- Finds the largest useful contour
-- Converts 2D points into complex numbers
-- Calculates discrete Fourier coefficients
-- Uses positive and negative frequency components
-- Reconstructs the image using epicycles
-- Creates an animated drawing
-- Exports a GIF
-- Supports command-line options
-- Validates input before processing
-- Includes automated tests and CI support
+- Reads an input image.
+- Finds the largest useful contour.
+- Converts 2D points into complex numbers.
+- Calculates discrete Fourier coefficients.
+- Uses positive and negative frequency components.
+- Reconstructs the outline using epicycles.
+- Creates an animation.
+- Exports the result as a GIF.
+- Supports command-line options.
+- Validates input before processing.
+- Includes automated tests and CI support.
 
 ## Run it
 
@@ -60,7 +72,7 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-Then run:
+Run the application:
 
 ```bash
 python main.py --input image.jpg --output file.gif --terms 100 --frames 300 --fps 20
@@ -68,18 +80,16 @@ python main.py --input image.jpg --output file.gif --terms 100 --frames 300 --fp
 
 ### What do these options mean?
 
-- `--input` — image you want to redraw
-- `--output` — GIF file to create
-- `--terms` — number of Fourier components used for reconstruction
-- `--frames` — number of animation frames
-- `--fps` — animation speed
-
-Using more terms usually gives a more detailed reconstruction, but requires more work to render.
+- `--input` — image you want to redraw.
+- `--output` — GIF file that will be created.
+- `--terms` — number of Fourier components used. More terms usually preserve more detail.
+- `--frames` — number of animation frames.
+- `--fps` — number of frames shown per second.
 
 ## Project structure
 
 ```text
-main.py       → Main application and animation
+main.py       → Main application and reconstruction pipeline
 image.jpg     → Example input image
 file.gif      → Example generated output
 draw.py       → Earlier drawing experiment
@@ -87,44 +97,57 @@ working.py    → Development experiment
 tests/        → Automated tests
 ```
 
+## Main technologies
+
+- **Python** — application logic
+- **NumPy** — numerical calculations and arrays
+- **Matplotlib** — drawing and animation
+- **Pillow** — image processing and contour preparation
+- **Pytest** — automated tests
+- **GitHub Actions** — automated CI checks
+
 ## Technical terms explained
 
-**Fourier analysis** — A mathematical method for breaking a complicated signal into simpler repeating waves. Here, the outline of an image is treated as a signal.
+**Fourier analysis** — A mathematical method for breaking a complicated signal into simpler repeating components. Here, the image outline is treated as a signal.
 
-**Fourier series** — A way of representing a repeating signal as a combination of sine/cosine waves or equivalent rotating components.
+**Fourier series** — A method of representing a repeating signal as a combination of simpler waves or equivalent rotating components.
 
-**Fourier coefficient** — A number that describes how much a particular frequency contributes to the reconstructed signal.
+**Fourier coefficient** — A value that describes how strongly a particular frequency contributes to the final reconstruction.
 
-**Frequency** — How quickly a component repeats. Different frequencies capture different levels of detail in the image outline.
+**Frequency** — How quickly a component repeats or rotates. Different frequencies help represent different levels of detail in the outline.
 
-**Complex number** — A number containing a real part and an imaginary part. Here it is a convenient way to represent an `(x, y)` point as one value.
+**Complex number** — A number with a real part and an imaginary part. In this project, a complex number is a convenient way to store an `(x, y)` point as one value.
 
 **Contour** — The boundary or outline of an object in an image.
 
-**Epicycle** — A circle whose centre moves around another point or circle. In this project, several rotating circles are combined to draw the shape.
+**Epicycle** — A rotating circle whose centre can itself move. Multiple epicycles can be connected together to create complex paths.
 
-**Reconstruction** — Building an approximation of the original image outline from the calculated Fourier components.
+**Reconstruction** — Creating an approximation of the original outline from the Fourier components.
 
-**NumPy** — A Python library for working efficiently with numerical data and arrays.
+**Signal** — A sequence of values that carries information. Here, the changing x/y coordinates of the outline are treated as a signal.
 
-**Matplotlib** — A Python library used here to draw and animate the reconstruction.
+**NumPy** — A Python library designed for fast numerical calculations and array operations.
 
-**CLI (Command-Line Interface)** — Running and controlling the application by typing commands in a terminal.
+**Matplotlib** — A Python library used to create plots, drawings and animations.
 
-**CI (Continuous Integration)** — Automated checks, such as tests, that run when code changes are pushed to GitHub.
+**CLI (Command-Line Interface)** — A way of controlling a program by typing commands in a terminal.
+
+**GIF** — An image format that can contain a sequence of frames to create a simple animation.
+
+**CI (Continuous Integration)** — Automatic checks, such as tests, that run when code changes are pushed to GitHub.
 
 ## What does this project demonstrate?
 
-This project combines mathematics and programming:
+This project connects mathematics, image processing and visualisation:
 
 **Image → contour → numerical signal → Fourier analysis → rotating components → reconstructed drawing**
 
-It demonstrates practical **Python, NumPy, mathematical modelling, Fourier analysis, visualization, animation, CLI design and testing** skills.
+It demonstrates practical **Python, NumPy, image processing, Fourier analysis, mathematical modelling, visualisation, animation, CLI design and testing** skills.
 
 ## Future improvements
 
-- Faster FFT-based coefficient calculation
-- Better contour cleaning and resampling
-- Performance benchmarks
-- Interactive controls for the number of terms
-- More mathematical visual explanations
+- Use FFT-based coefficient calculation for faster processing.
+- Improve contour cleaning and resampling.
+- Add reconstruction performance benchmarks.
+- Add interactive controls for Fourier terms.
+- Add visual explanations of the mathematics.
